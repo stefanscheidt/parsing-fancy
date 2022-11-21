@@ -37,54 +37,54 @@ object ThreatModelParser : Grammar<ThreadModel>() {
 
     private val WHITESPACE by regexToken("\\s+", ignore = true)
 
-    private val oneIdentifier: Parser<List<String>> =
+    private val oneIdentifier: Parser<List<String>> by
         IDENT map { listOf(it.text) }
-    private val manyIdentifiers: Parser<List<String>> =
+    private val manyIdentifiers: Parser<List<String>> by
         skip(LBRACE) and separatedTerms(IDENT, COMMA) and skip(RBRACE) map { terms ->
             terms.map { it.text }
         }
-    val identifierList: Parser<List<String>> =
+    val identifierList: Parser<List<String>> by
         oneIdentifier or manyIdentifiers
 
-    private val noDefences: Parser<Set<CounterMeasure>> =
+    private val noDefences: Parser<Set<CounterMeasure>> by
         NO_DEFENCES asJust emptySet()
-    private val someDefences: Parser<Set<CounterMeasure>> =
+    private val someDefences: Parser<Set<CounterMeasure>> by
         skip(DEFENSES_PREFIX) and identifierList map { names ->
             names.map(::CounterMeasure).toSet()
         }
-    private val defences: Parser<Set<CounterMeasure>> =
+    private val defences: Parser<Set<CounterMeasure>> by
         noDefences or someDefences
-    private val target: Parser<Target> =
+    private val target: Parser<Target> by
         IDENT and defences map { (tokenMatch, defences) ->
             Target(tokenMatch.text, defences)
         }
-    val targetSection: Parser<Set<Target>> =
+    val targetSection: Parser<Set<Target>> by
         skip(TARGET_HEADER) and separatedTerms(target, WHITESPACE) map {
             it.toSet()
         }
 
-    private val noWeaknesses: Parser<Set<CounterMeasure>> =
+    private val noWeaknesses: Parser<Set<CounterMeasure>> by
         NO_WEAKNESSES asJust emptySet()
     private val someWeaknesses: Parser<Set<CounterMeasure>> =
         skip(WEAKNESSES_PREFIX) and identifierList map { names ->
             names.map(::CounterMeasure).toSet()
         }
-    private val weaknesses: Parser<Set<CounterMeasure>> =
+    private val weaknesses: Parser<Set<CounterMeasure>> by
         noWeaknesses or someWeaknesses
-    private val threat: Parser<Threat> =
+    private val threat: Parser<Threat> by
         IDENT and weaknesses map { (tokenMatch, weakness) ->
             Threat(tokenMatch.text, weakness)
         }
-    val threatSection: Parser<Set<Threat>> =
+    val threatSection: Parser<Set<Threat>> by
         skip(THREAT_HEADER) and separatedTerms(threat, WHITESPACE) map {
             it.toSet()
         }
 
-    private val scenario: Parser<Scenario> =
+    private val scenario: Parser<Scenario> by
         IDENT and skip(VERSUS) and IDENT map { (thread, target) ->
             Scenario(thread.text, target.text)
         }
-    val scenarioSection: Parser<Set<Scenario>> =
+    val scenarioSection: Parser<Set<Scenario>> by
         skip(SCENARIO_HEADER) and separatedTerms(scenario, WHITESPACE) map {
             it.toSet()
         }
