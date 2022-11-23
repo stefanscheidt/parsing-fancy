@@ -16,7 +16,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.Test
 
 class ThreatModelParserTest {
-    private val tokenizer = ThreatModelParser.tokenizer
     private val targetFragment =
         """Targets:
           |    Equifax is undefended
@@ -38,13 +37,20 @@ class ThreatModelParserTest {
           |    JavaScript vs Tyro
           """.trimMargin()
 
-    private val threadModel =
+    private val threadModelAsString =
         """$targetFragment
           |
           |$threatFragment
           |
           |$scenarioFragment
           """.trimMargin()
+
+    private val tokenizer = ThreatModelParser.tokenizer
+
+    @Test
+    internal fun `print input`() {
+        println(threadModelAsString)
+    }
 
     @Test
     fun `the identifier parser should parse a single identifier as a list`() {
@@ -124,7 +130,7 @@ class ThreatModelParserTest {
 
     @Test
     fun `the threat model grammar should parse threat model`() {
-        when (val result = ThreatModelParser.tryParseToEnd(threadModel)) {
+        when (val result = ThreatModelParser.tryParseToEnd(threadModelAsString)) {
             is Parsed -> {
                 result.value shouldBe ThreadModel(
                     targets = setOf(
