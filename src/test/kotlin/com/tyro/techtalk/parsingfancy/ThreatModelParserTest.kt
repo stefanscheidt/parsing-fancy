@@ -13,6 +13,7 @@ import io.kotest.matchers.collections.contain
 import io.kotest.matchers.collections.containsInOrder
 import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
+import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 class ThreatModelParserTest {
@@ -48,11 +49,12 @@ class ThreatModelParserTest {
     private val tokenizer = ThreatModelParser.tokenizer
 
     @Test
-    internal fun `print input`() {
+    fun `print input`() {
         println(threadModelAsString)
     }
 
     @Test
+    @Disabled
     fun `the identifier parser should parse a single identifier as a list`() {
         when (val result = ThreatModelParser.identifierList.tryParseToEnd(tokenizer.tokenize("abc"), 0)) {
             is Parsed -> {
@@ -66,6 +68,7 @@ class ThreatModelParserTest {
     }
 
     @Test
+    @Disabled
     fun `the identifier parser should parse a command separated list of tokens`() {
         when (val result = ThreatModelParser.identifierList.tryParseToEnd(tokenizer.tokenize("[abc, def]"), 0)) {
             is Parsed -> {
@@ -79,6 +82,7 @@ class ThreatModelParserTest {
     }
 
     @Test
+    @Disabled
     fun `the target parser should parse a whitespace separated list of targets`() {
         when (val result = ThreatModelParser.targetSection.tryParseToEnd(tokenizer.tokenize(targetFragment), 0)) {
             is Parsed -> {
@@ -96,6 +100,7 @@ class ThreatModelParserTest {
     }
 
     @Test
+    @Disabled
     fun `the threat parser should parse a whitespace separated list of threats`() {
         when (val result = ThreatModelParser.threatSection.tryParseToEnd(tokenizer.tokenize(threatFragment), 0)) {
             is Parsed -> {
@@ -113,6 +118,7 @@ class ThreatModelParserTest {
     }
 
     @Test
+    @Disabled
     fun `the scenario parser should parse a whitespace separated list of scenarios`() {
         when (val result = ThreatModelParser.scenarioSection.tryParseToEnd(tokenizer.tokenize(scenarioFragment), 0)) {
             is Parsed -> {
@@ -129,6 +135,7 @@ class ThreatModelParserTest {
     }
 
     @Test
+    @Disabled
     fun `the threat model grammar should parse threat model`() {
         when (val result = ThreatModelParser.tryParseToEnd(threadModelAsString)) {
             is Parsed -> {
