@@ -48,7 +48,7 @@ class ThreatModelParserTest {
     private val tokenizer = ThreatModelParser.tokenizer
 
     @Test
-    internal fun `print input`() {
+    fun `print input`() {
         println(threadModelAsString)
     }
 
