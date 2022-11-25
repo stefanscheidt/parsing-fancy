@@ -6,6 +6,75 @@ theme: Simple
 
 ---
 
+# Credits
+
+This is an updated and slightly modified version of [parsing-fancy_kotlin](https://github.com/sigerber/parsing-fancy_kotlin) by [Simon Gerber](https://github.com/sigerber).
+
+See also the YouTube talk [Parsing Fancy - Parser Combinators in Kotlin](https://www.youtube.com/watch?v=lHRC84sc4P0) by Simon.
+
+---
+
+# Source Code
+
+The code for this talk can be found [on GitHub](https://github.com/stefanscheidt/parsing-fancy).
+
+---
+
+# The Example - Input
+
+```
+    Targets:
+        Equifax is undefended
+        Tyro is defended by types
+        Earth is defended by [TheDoctor, CaptainPlanet]
+    
+    Threats:
+        GlobalWarming has no weaknesses
+        JavaScript is weak against types
+        TheMaster is weak against [TheDoctor, UntemperedSchism]
+    
+    Scenarios:
+        TheMaster vs Earth
+        GlobalWarming vs Earth
+        JavaScript vs Tyro
+```
+
+---
+
+# The Example - Model
+
+```kotlin
+    data class CounterMeasure constructor(
+        val name: String
+    )
+    
+    data class Target(
+        val name: String,
+        val defendedBy: Set<CounterMeasure>
+    )
+    
+    data class Threat(
+        val name: String,
+        val counteredBy: Set<CounterMeasure>
+    )
+    
+    data class ThreadModel(
+        val targets: Set<Target>,
+        val threads: Set<Threat>,
+        val scenarios: Set<Scenario>,
+    )
+```
+
+---
+
+# Our Goal
+
+```kotlin
+fun tryParseThreadModel(input: String): ParseResult<ThreadModel>
+```
+
+---
+
 # Parser in Kotlin better-parse[^1]
 
 ```kotlin
@@ -50,6 +119,23 @@ fun <T> Grammar<T>.tryParseToEnd(input: String): ParseResult<T> =
 ```
 
 [^4]: [github.com/h0tk3y/better-parse](https://github.com/h0tk3y/better-parse/blob/master/src/commonMain/kotlin/com/github/h0tk3y/betterParse/grammar/Grammar.kt)
+
+---
+
+# Our Goal - refined
+
+```kotlin
+object ThreatModelParser : Grammar<ThreadModel>() {
+
+    // ...
+
+    override val rootParser: Parser<ThreadModel> // ...
+}
+
+// ParseResult<ThreadModel>
+ThreatModelParser.tryParseToEnd(threadModelAsString)
+
+```
 
 ---
 
