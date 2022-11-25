@@ -111,7 +111,7 @@ interface Tokenizer {
 
 # Grammar in Kotlin better-parse[^4]
 
-> A language grammar represented by a list of tokens and one or more parsers, with one specific root parser that accepts the words of this grammar.
+> A language grammar represented by **a list of tokens** and **one or more parsers**, with one specific **root parser** that accepts the words of this grammar.
 
 ```kotlin
 fun <T> Grammar<T>.tryParseToEnd(input: String): ParseResult<T> =
@@ -119,6 +119,23 @@ fun <T> Grammar<T>.tryParseToEnd(input: String): ParseResult<T> =
 ```
 
 [^4]: [github.com/h0tk3y/better-parse](https://github.com/h0tk3y/better-parse/blob/master/src/commonMain/kotlin/com/github/h0tk3y/betterParse/grammar/Grammar.kt)
+
+---
+
+# Our Goal - refined
+
+```kotlin
+object ThreatModelParser : Grammar<ThreadModel>() {
+
+    // ...
+
+    override val rootParser: Parser<ThreadModel> // ...
+}
+
+// ParseResult<ThreadModel>
+ThreatModelParser.tryParseToEnd(threadModelAsString)
+
+```
 
 ---
 
